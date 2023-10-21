@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Quiz App</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Josefin+Sans:ital,wght@0,300;0,500;1,400;1,500&display=swap"
+        rel="stylesheet">
+
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="./resources/favicon.png">
+    <!-- Font-awesome  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <!-- Bootsrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <main>
+        <div class="center">
+            <h1 class="main-title">WichayGPT</h1>
+            <span>Incubadora de <span class="golden-text">startups</span> y negocios innovadores</span>
+
+            <div id="chat-log">
+                <div class="message message--sent">
+                    <div>Quien eres?</div>
+                </div>
+
+                <div class="message  message--received">
+                    <div>Soy WichayGPT, un asistente virtual diseñado para proporcionar consejor y
+                        tutorias sobre negocios y empresa. Estoy aqui para ayudarte con acualquier pregunta o duda que
+                        pueda tener realcionadacon ese tema. ¿En que puedo ayudarte?
+                    </div>
+                </div>
+            </div>
+
+            <form action="" class="chat-form">
+
+                <!-- <input class="mini-input" type="text" name="message" id="message"> -->
+
+                <span id="message" class="textarea" role="textbox" contenteditable
+                    data-quiz="<%= diagnostico %>"></span>
+
+                <button type="submit" class="mini-button">Enviar</button>
+            </form>
+
+
+
+
+        </div>
+    </main>
+    <script>
+        let messages = []
+        const chatLog = document.getElementById('chat-log');
+        const message = document.getElementById('message');
+        const form = document.querySelector('form');
+
+        if (message.getAttribute("data-quiz")) {
+            const messageText = message.innerText;
+            callMessage(message.getAttribute("data-quiz"))
+        }
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const messageText = message.innerText;
+            callMessage(messageText)
+        })
+
+        function callMessage(messageText) {
+
+            const newMessage = { "role": "user", "content": `${messageText}` }
+            messages.push(newMessage)
+            message.innerText = '';
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add('message--sent');
+            messageElement.innerHTML = `
+				<div class="message__text">${messageText}</div>
+			`;
+            chatLog.appendChild(messageElement);
+            chatLog.scrollTop = chatLog.scrollHeight;
+            fetch('http://localhost:3000', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    messages
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+
+                    let newAssistantMessage = { "role": "assistant", "content": `${data.completion.content}` }
+                    messages.push(newAssistantMessage)
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message');
+                    messageElement.classList.add('message--received');
+                    messageElement.innerHTML = `
+					<div class="message__text">${data.completion.content}</div>
+				`;
+                    chatLog.appendChild(messageElement);
+                    chatLog.scrollTop = chatLog.scrollHeight;
+                })
+        }
+    </script>
+</body>
+</body>
+
+</html>
