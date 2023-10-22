@@ -6,58 +6,99 @@ const openai = new OpenAI({
     apiKey: process.env.AI_KEY
 });
 
-const student1Description = "David Nguyen is a sophomore majoring in computer science at Stanford University. He is Asian American and has a 3.8 GPA. David is known for his programming skills and is an active member of the university's Robotics Club. He hopes to pursue a career in artificial intelligence after graduating.";
+function helloWorld(appendString) {
+    let hello = "Hello World! " + appendString;
+    //return hello;
+    return JSON.stringify(hello);
+}
 
-const student2Description = "Ravi Patel is a sophomore majoring in computer science at the University of Michigan. He is South Asian Indian American and has a 3.7 GPA. Ravi is an active member of the university's Chess Club and the South Asian Student Association. He hopes to pursue a career in software engineering after graduating.";
+// Get the current time of day
+function getTimeOfDay() {
+    let date = new Date();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    let timeOfDay = "AM";
+    if (hours > 12) {
+        hours = hours - 12;
+        timeOfDay = "PM";
+    }
+    return hours + ":" + minutes + ":" + seconds + " " + timeOfDay;
+    return JSON.stringify(hours + ":" + minutes + ":" + seconds + " " + timeOfDay);
+}
 
-const studentCustomFunctions = [
-    {
-        name: 'extract_student_info',
-        description: 'Get the student information from the body of the input text',
-        parameters: {
-            type: 'object',
-            properties: {
-                name: {
-                    type: 'string',
-                    description: 'Name of the person',
+// Define your ChatGPT Function
+async function runConversation() {
+    let messages = [{
+        role: "system",
+        content: "Perform function requests for the user",
+    }, {
+        role: "user",
+        content: "Hello, I am a user, add hello world to this sentence 'loving people'",
+    }];
+    // Step 1: Call ChatGPT with the function name
+    let chat = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages,
+        functions: [{
+            name: "helloWorld",
+            description: "Prints hello world with the string passed to it",
+            parameters: {
+                type: "object",
+                properties: {
+                    appendString: {
+                        type: "string",
+                        description: "The string to append to the hello world message",
+                    },
                 },
-                major: {
-                    type: 'string',
-                    description: 'Major subject.',
-                },
-                school: {
-                    type: 'string',
-                    description: 'The university name.',
-                },
-                grades: {
-                    type: 'integer',
-                    description: 'GPA of the student.',
-                },
-                club: {
-                    type: 'string',
-                    description: 'School club for extracurricular activities. ',
-                },
-            },
+                require: ["appendString"],
+            }
         },
-    },
-];
-
-const studentDescription = [student1Description, student2Description, 'hola'];
-
-studentDescription.forEach((sample) => {
-    openai.chat.completions.create({
-        model: 'gpt-3.5-turbo',
-        messages: [{ role: 'user', content: sample }],
-        functions: studentCustomFunctions,
-        function_call: 'auto',
-    }).then((response) => {
-        const json_response = 0;
-        if (response.choices[0].message.function_call.arguments) {
-            json_response = response.choices[0].message.function_call.arguments;
-        } else {
-            json_response = response.choices[0].message;
-        }
-
-        console.log(JSON.parse(json_response));
+        {
+            name: "getTimeOfDay",
+            description: "Get the time of day.",
+            parameters: {
+                type: "object",
+                properties: {
+                },
+                require: [],
+            }
+        }],
+        function_call: "auto",
     });
-});
+
+    const responseMessage = chat.choices[0].message;
+    let content = "";
+    // Step 2: Check if ChatGPT wants to use a function
+    if (responseMessage.function_call) {
+        // Step 3: Use ChatGPT arguments to call your function
+        if (responseMessage.function_call.name == "helloWorld") {
+            let argumentObj = JSON.parse(chat.choices[0].message.function_call.arguments);
+            content = helloWorld(argumentObj.appendString);
+            messages.push(chat.choices[0].message);
+            messages.push({
+                role: "function",
+                name: "helloWorld",
+                content,
+            });
+        }
+        if (responseMessage.function_call.name == "getTimeOfDay") {
+            content = getTimeOfDay();
+            messages.push(chat.choices[0].message);
+            messages.push({
+                role: "function",
+                name: "getTimeOfDay",
+                content,
+            });
+        }
+    }
+
+    // Step 4: Call ChatGPT again with the function response
+    let step4response = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages,
+    });
+    console.log(step4response.choices[0].message);
+}
+
+runConversation();
