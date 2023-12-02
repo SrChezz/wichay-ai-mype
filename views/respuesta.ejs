@@ -41,6 +41,7 @@
                         tutorias sobre negocios y empresa. Estoy aqui para ayudarte con acualquier pregunta o duda que
                         pueda tener realcionadacon ese tema. ¿En que puedo ayudarte?
                     </div>
+
                 </div>
             </div>
 
@@ -51,11 +52,8 @@
                 <span id="message" class="textarea" role="textbox" contenteditable
                     data-quiz="<%= diagnostico %>"></span>
 
-                <button type="submit" class="mini-button">Enviar</button>
+                <button id="submit" type="submit" class="mini-button">Enviar</button>
             </form>
-
-
-
 
         </div>
     </main>
@@ -64,10 +62,14 @@
         const chatLog = document.getElementById('chat-log');
         const message = document.getElementById('message');
         const form = document.querySelector('form');
+        const submitButton = document.getElementById('submit');
 
         if (message.getAttribute("data-quiz")) {
-            const messageText = message.innerText;
-            callMessage(message.getAttribute("data-quiz"))
+
+            const messageText = message.getAttribute("data-quiz")
+            if (messageText != undefined) {
+                callFirstMessage(messageText)
+            }
         }
 
         form.addEventListener('submit', (e) => {
@@ -89,7 +91,7 @@
 			`;
             chatLog.appendChild(messageElement);
             chatLog.scrollTop = chatLog.scrollHeight;
-            fetch('http://localhost:3000', {
+            fetch('http://localhost:3000/functions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -113,6 +115,55 @@
                     chatLog.scrollTop = chatLog.scrollHeight;
                 })
         }
+
+        function callFirstMessage(messageText) {
+            const newMessage = { "role": "user", "content": `${messageText}` };
+            messages.push(newMessage);
+            message.setAttribute("data-quiz", '');  // Corregido: '=' en lugar de '='
+
+            chatLog.scrollTop = chatLog.scrollHeight;
+
+            fetch('http://localhost:3000/functions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    messages
+                })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    let newAssistantMessage = { "role": "assistant", "content": `${data.completion.content}` };
+                    messages.push(newAssistantMessage);
+
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message');
+                    messageElement.classList.add('message--received');
+                    messageElement.innerHTML = `
+            <div class="message__text">${data.completion.content}</div>
+        `;
+
+                    chatLog.appendChild(messageElement);
+                    chatLog.scrollTop = chatLog.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                });
+        }
+
+
+        document.addEventListener('keydown', function (e) {
+            if (e.keyCode === 13 && e.ctrlKey) {
+                // Prevent the default action
+                event.preventDefault();
+
+                // Trigger the button click
+                submitButton.click();
+            }
+        });
+
+
     </script>
 </body>
 </body>

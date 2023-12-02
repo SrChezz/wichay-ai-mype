@@ -7,15 +7,16 @@ const textos = document.querySelectorAll('.quiz-text input');
 const botonSiguiente = document.querySelector('.button');
 const progressVar = document.querySelector('.top-inner-container');
 
+
+const EInput = document.getElementById('ToptionE');
+
 const preguntas = [
     {
         numero: 1,
         texto: "Información General",
         opciones: [
             "Nombre de la empresa:",
-            "Industria:",
-            "Tiempo en el mercado:",
-            "Número de empleados:"
+            "Industria:"
         ],
         respuestaCorrecta: ""
     },
@@ -103,28 +104,28 @@ const preguntas = [
         ],
         respuestaCorrecta: ""
     },
-    {
-        texto: "¿Cuál es su enfoque principal en términos de innovación tecnológica?",
-        opciones: [
-            "Desarrollo de nuevos productos / servicios",
-            "Mejora de la eficiencia operativa",
-            "Experiencia del cliente digital",
-            "Automatización de procesos",
-            "Otro (especificar):"
-        ],
-        respuestaCorrecta: ""
-    },
-    {
-        texto: "¿Cuáles son las principales iniciativas de responsabilidad social de su empresa?",
-        opciones: [
-            "Donaciones a organizaciones benéficas",
-            "Reducción de la huella de carbono",
-            "Programas de voluntariado para empleados",
-            "Colaboraciones con comunidades locales",
-            "Otro (especificar):"
-        ],
-        respuestaCorrecta: ""
-    }
+    // {
+    //     texto: "¿Cuál es su enfoque principal en términos de innovación tecnológica?",
+    //     opciones: [
+    //         "Desarrollo de nuevos productos / servicios",
+    //         "Mejora de la eficiencia operativa",
+    //         "Experiencia del cliente digital",
+    //         "Automatización de procesos",
+    //         "Otro (especificar):"
+    //     ],
+    //     respuestaCorrecta: ""
+    // },
+    // {
+    //     texto: "¿Cuáles son las principales iniciativas de responsabilidad social de su empresa?",
+    //     opciones: [
+    //         "Donaciones a organizaciones benéficas",
+    //         "Reducción de la huella de carbono",
+    //         "Programas de voluntariado para empleados",
+    //         "Colaboraciones con comunidades locales",
+    //         "Otro (especificar):"
+    //     ],
+    //     respuestaCorrecta: ""
+    // }
 ];
 
 let respuestas = [];
@@ -165,6 +166,8 @@ function cambiarPregunta(pregunta) {
             opcion.nextElementSibling.textContent = pregunta.opciones[index];
             opcion.value = pregunta.opciones[index];
         });
+
+        EInput.value = "";
     }
 }
 

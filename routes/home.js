@@ -18,28 +18,36 @@ router.get('/respuesta', (req, res) => {
     // Recupera las respuestas de la URL
     const respuestas = req.query.r || [];
 
+    if (respuestas.length == 0) {
+        console.log("no formatting")
+        res.render("respuesta", { diagnostico: "" })
+    } else {
+        let diagnostico = `Esto son los datos de mi empresa, dame un resumen de toda la informacion que te he brindado
+        Nombre: ${respuestas[0]}
+        Industria:  ${respuestas[1]}
+        Principal fuente de ingresos:  ${respuestas[2]}
+        Estrategia actual:  ${respuestas[3]}
+        Principal canal de distribución:  ${respuestas[4]}
+        Desafío Operativo actual:  ${respuestas[5]}
+        Estrategia para clientes:  ${respuestas[6]}
+        Motivación de empleados:  ${respuestas[7]}
+        Objetivo Financiero:  ${respuestas[8]}`
+
+        res.render("respuesta", { diagnostico: diagnostico })
+    }
+
+    console.log(respuestas)
+});
+
+router.post('/redirect', (req, res) => {
+    // Recupera las respuestas de la URL
+    const respuestas = req.body || [];
+
     // Procesa y muestra las respuestas
     // res.send(`Tus respuestas son: ${respuestas.join(', ')}`);
+    console.log(req.body)
 
-    //Mesanje del quiz
-    let diagnostico = `Dame consejos breves, para mi empresa
-    Nombre: ${respuestas[0]}
-    Industria:  ${respuestas[1]}
-    Tiempo:  ${respuestas[2]}
-    Empleados:  ${respuestas[3]}
-    
-    Principal fuente de ingresos:  ${respuestas[4]}
-    Estrategia actual:  ${respuestas[5]}
-    Principal canal de distribución:  ${respuestas[6]}
-    Desafío Operativo actual:  ${respuestas[7]}
-    Estrategia para clientes:  ${respuestas[8]}
-    Motivación de empleados:  ${respuestas[9]}
-    Objetivo Financiero:  ${respuestas[10]}
-    Enfoque de Innovación:  ${respuestas[11]}
-    Iniciativas sociales:  ${respuestas[12]}`
-
-    res.render("respuesta", { diagnostico: diagnostico })
-    console.log(respuestas)
+    res.json(req.body);
 });
 
 router.get('/respuesta2', (req, res) => {
@@ -114,6 +122,24 @@ router.post("/function", async (req, res) => {
         completion: chatCompletion.choices['choices'][0]['message']['function_call']['arguments'].message
 
 
+    });
+});
+
+
+router.post("/first", async (req, res) => {
+    console.log(req.body);
+    const { messages } = req.body;
+
+    const chatCompletion = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: [
+            { "role": "system", "content": `Eres WichayGPT, estas diseñado para dar consejos y tutorías sobre negocios y empresa. Brinda respuestas cortas siempre y cuando el usuario no especifique lo contrario` },
+            ...messages
+        ]
+    });
+
+    res.json({
+        completion: chatCompletion.choices[0].message
     });
 });
 

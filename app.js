@@ -4,11 +4,12 @@ import 'dotenv/config'
 import OpenAI from 'openai';
 import cors from "cors";
 import express from "express";
-import main from "./db.js";
 import expressLayouts from 'express-ejs-layouts';
-import bodyParser from 'body-parser'; // Importa bodyParser
+import bodyParser from 'body-parser';
+// Importa bodyParser
 
 import homeRouter from "./routes/home.js"; // Importa homeRouter desde el archivo adecuado
+import functionRouter from "./routes/functions.js"; // Importa homeRouter desde el archivo adecuado
 
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -40,6 +41,7 @@ app.set('views', __dirname + '/views');
 // app.use(expressLayouts);
 
 app.use("/", homeRouter);
+app.use("/functions", functionRouter);
 
 app.listen(3000, () => {
     console.log("Servidor en funcionamiento en el puerto 3000");

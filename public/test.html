@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+</head>
+
+<body>
+    <!-- Asegúrate de tener un botón con el ID 'button' en tu HTML -->
+    <button id="button">Haz clic</button>
+
+    <!-- Tu script JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Declarar la variable button antes de usarla
+            const button = document.getElementById('button');
+
+            // Asignar un evento de clic al botón
+            button.addEventListener('click', () => {
+                // Hacer la solicitud fetch
+                fetch('http://localhost:3000/redirect', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        test: 'hola ojo ojo'
+                    })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        // Manejar la respuesta exitosa
+                        console.log(data);
+                    })
+                    .catch(error => {
+                        // Manejar errores
+                        console.error('Error fetching data:', error);
+                    });
+            });
+        });
+    </script>
+</body>
+
+</html>

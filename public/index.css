@@ -69,6 +69,21 @@ main>div::-webkit-scrollbar-track {
 }
 
 
+.lamp {
+  position: absolute;
+  right: 20%;
+  top: 0px;
+  width: 400px;
+  height: auto;
+  transition: all .3s ease;
+  cursor: pointer;
+  /* z-index: -1; */
+}
+
+.lamp:hover {
+  transform: scale(1.1);
+}
+
 .main-title {
   font-size: 4rem;
   margin-bottom: -10px;
@@ -208,6 +223,12 @@ h6 {
 .button:disabled {
   cursor: default;
   filter: brightness(30%);
+}
+
+.button2 {
+  color: var(--color-purple);
+  background: white;
+  margin-top: 15px;
 }
 
 .top-container {
