@@ -43,8 +43,7 @@ app.set('views', __dirname + '/views');
 app.use("/", homeRouter);
 app.use("/functions", functionRouter);
 
-app.listen(3000, () => {
-    console.log("Servidor en funcionamiento en el puerto 3000");
-});
+app.set('port', process.env.PORT || 3000);
+
 
 export default openai; // Exporta la instancia de express 'app', no 'openai'
