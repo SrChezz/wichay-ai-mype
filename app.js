@@ -43,7 +43,9 @@ app.set('views', __dirname + '/views');
 app.use("/", homeRouter);
 app.use("/functions", functionRouter);
 
-app.set('port', process.env.PORT || 3000);
+var port = process.env.PORT || 3000;
+
+app.listen(port);
 
 
 export default openai; // Exporta la instancia de express 'app', no 'openai'
