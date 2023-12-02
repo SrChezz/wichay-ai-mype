@@ -139,53 +139,53 @@ async function recomendarExpertos(profesion) {
 
 router.post("/", async (req, res) => {
     console.log(req.body);
-    // const { messages } = req.body;
+    const { messages } = req.body;
 
-    const messages = [
-        {
-            role: 'user',
-            content: 'Esto son los datos de mi empresa, dame un resumen de toda la informacion que te he brindado\n' +
-                '        Nombre: Chezvil\n' +
-                '        Industria:  Venta de Celulares\n' +
-                '        Principal fuente de ingresos:  Ventas de productos\n' +
-                '        Estrategia actual:  Precios basados en la competencia\n' +
-                '        Principal canal de distribución:  Comercio electrónico (online)\n' +
-                '        Desafío Operativo actual:  Logística y transporte\n' +
-                '        Estrategia para clientes:  Marketing de contenidos y blogs\n' +
-                '        Motivación de empleados:  Evaluaciones de desempeño\n' +
-                '        Objetivo Financiero:  Crecimiento sostenible'
-        },
-        {
-            role: 'assistant',
-            content: 'En base a los datos que me has brindado, esta es la información recopilada de tu empresa:\n' +
-                '\n' +
-                'Nombre: Chezvil\n' +
-                'Industria: Venta de Celulares\n' +
-                'Principal fuente de ingresos: Ventas de productos\n' +
-                'Estrategia actual: Precios basados en la competencia\n' +
-                'Principal canal de distribución: Comercio electrónico (online)\n' +
-                'Desafío Operativo actual: Logística y transporte\n' +
-                'Estrategia para clientes: Marketing de contenidos y blogs\n' +
-                'Motivación de empleados: Evaluaciones de desempeño\n' +
-                'Objetivo Financiero: Crecimiento sostenible\n' +
-                '\n' +
-                'En resumen, Chezvil es una empresa dedicada a la venta de celulares que enfoca sus estrategias en ofrecer precios competitivos basados en la competencia. Su principal canal de distribución es a través del comercio electrónico, con un enfoque en el marketing de contenidos y blogs para atraer a los clientes. La empresa se enfrenta actualmente a desafíos en términos de logística y transporte. La motivación de los empleados se basa en las evaluaciones de desempeño y el objetivo financiero de la empresa es lograr un crecimiento sostenible.\n' +
-                '\n' +
-                '¿Te gustaría recibir recomendaciones para mejorar tu negocio?'
-        },
-        { role: 'user', content: 'Si, por favor, dame recomendaciones\n' },
-        {
-            role: 'assistant',
-            content: 'Aquí te van algunas recomendaciones para mejorar tu negocio:\n' +
-                '\n' +
-                '- Optimiza tu proceso logístico y transporte para garantizar una entrega rápida y eficiente de los productos.\n' +
-                '- Aprovecha las redes sociales y el marketing digital para expandir tu alcance y atraer a más clientes.\n' +
-                '- Implementa programas de fidelización para mantener a tus clientes actuales y generar recomendaciones.\n' +
-                '\n' +
-                '¿Deseas que te recomiende a un profesional para que te ayude en tu negocio?'
-        },
-        { role: 'user', content: 'Si, recomiendame a expertos' }
-    ];
+    // const messages = [
+    //     {
+    //         role: 'user',
+    //         content: 'Esto son los datos de mi empresa, dame un resumen de toda la informacion que te he brindado\n' +
+    //             '        Nombre: Chezvil\n' +
+    //             '        Industria:  Venta de Celulares\n' +
+    //             '        Principal fuente de ingresos:  Ventas de productos\n' +
+    //             '        Estrategia actual:  Precios basados en la competencia\n' +
+    //             '        Principal canal de distribución:  Comercio electrónico (online)\n' +
+    //             '        Desafío Operativo actual:  Logística y transporte\n' +
+    //             '        Estrategia para clientes:  Marketing de contenidos y blogs\n' +
+    //             '        Motivación de empleados:  Evaluaciones de desempeño\n' +
+    //             '        Objetivo Financiero:  Crecimiento sostenible'
+    //     },
+    //     {
+    //         role: 'assistant',
+    //         content: 'En base a los datos que me has brindado, esta es la información recopilada de tu empresa:\n' +
+    //             '\n' +
+    //             'Nombre: Chezvil\n' +
+    //             'Industria: Venta de Celulares\n' +
+    //             'Principal fuente de ingresos: Ventas de productos\n' +
+    //             'Estrategia actual: Precios basados en la competencia\n' +
+    //             'Principal canal de distribución: Comercio electrónico (online)\n' +
+    //             'Desafío Operativo actual: Logística y transporte\n' +
+    //             'Estrategia para clientes: Marketing de contenidos y blogs\n' +
+    //             'Motivación de empleados: Evaluaciones de desempeño\n' +
+    //             'Objetivo Financiero: Crecimiento sostenible\n' +
+    //             '\n' +
+    //             'En resumen, Chezvil es una empresa dedicada a la venta de celulares que enfoca sus estrategias en ofrecer precios competitivos basados en la competencia. Su principal canal de distribución es a través del comercio electrónico, con un enfoque en el marketing de contenidos y blogs para atraer a los clientes. La empresa se enfrenta actualmente a desafíos en términos de logística y transporte. La motivación de los empleados se basa en las evaluaciones de desempeño y el objetivo financiero de la empresa es lograr un crecimiento sostenible.\n' +
+    //             '\n' +
+    //             '¿Te gustaría recibir recomendaciones para mejorar tu negocio?'
+    //     },
+    //     { role: 'user', content: 'Si, por favor, dame recomendaciones\n' },
+    //     {
+    //         role: 'assistant',
+    //         content: 'Aquí te van algunas recomendaciones para mejorar tu negocio:\n' +
+    //             '\n' +
+    //             '- Optimiza tu proceso logístico y transporte para garantizar una entrega rápida y eficiente de los productos.\n' +
+    //             '- Aprovecha las redes sociales y el marketing digital para expandir tu alcance y atraer a más clientes.\n' +
+    //             '- Implementa programas de fidelización para mantener a tus clientes actuales y generar recomendaciones.\n' +
+    //             '\n' +
+    //             '¿Deseas que te recomiende a un profesional para que te ayude en tu negocio?'
+    //     },
+    //     { role: 'user', content: 'Si, recomiendame a expertos' }
+    // ];
 
     console.log(messages);
 
