@@ -121,7 +121,7 @@ async function recomendarExpertos(profesion) {
     try {
         const connection = await mysql.createConnection(process.env.DATABASE_URL);
 
-        console.log(profesion);
+        //console.log(profesion);
         let SQL = `SELECT * FROM tbl_Expertos WHERE Profesion = "${profesion.d}"`
         console.log(SQL);
         const [rows] = await connection.execute(SQL);
@@ -129,8 +129,8 @@ async function recomendarExpertos(profesion) {
 
         const jsonData = JSON.stringify(rows);
 
-        console.log(profesion);
-        console.log(jsonData);
+        //console.log(profesion);
+        //console.log(jsonData);
         return jsonData;
     } catch (err) {
         throw new Error(`Error while getting data: ${err.message}`);
@@ -138,7 +138,7 @@ async function recomendarExpertos(profesion) {
 }
 
 router.post("/", async (req, res) => {
-    console.log(req.body);
+    //console.log(req.body);
     const { messages } = req.body;
 
     // const messages = [
@@ -187,7 +187,7 @@ router.post("/", async (req, res) => {
     //     { role: 'user', content: 'Si, recomiendame a expertos' }
     // ];
 
-    console.log(messages);
+    //console.log(messages);
 
     try {
         let chat = await openai.chat.completions.create({
@@ -308,7 +308,7 @@ router.post("/", async (req, res) => {
         let content = "";
 
         if (responseMessage.function_call) {
-            console.log(responseMessage.function_call.name);
+            //console.log(responseMessage.function_call.name);
 
             switch (responseMessage.function_call.name) {
                 case "retornarEmoji":
@@ -318,8 +318,8 @@ router.post("/", async (req, res) => {
                     let function_args = JSON.parse(responseMessage["function_call"]["arguments"]);
 
                     let profesion = function_args.profesion
-                    console.log("Asignar interior a profesion");
-                    console.log(profesion);
+                    //console.log("Asignar interior a profesion");
+                    //console.log(profesion);
 
                     content = await recomendarExpertos({
                         d: profesion
@@ -351,7 +351,7 @@ router.post("/", async (req, res) => {
             messages,
         });
 
-        console.log(step4response.choices[0].message.content)
+        //console.log(step4response.choices[0].message.content)
         res.json({
             completion: step4response.choices[0].message
         });
