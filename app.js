@@ -45,7 +45,9 @@ app.use("/functions", functionRouter);
 
 var port = process.env.PORT || 3000;
 
-app.listen(port);
+app.listen(port, () => {
+    console.log(`El servidor está escuchando en el puerto ${port}`);
+});
 
 
 export default openai; // Exporta la instancia de express 'app', no 'openai'
